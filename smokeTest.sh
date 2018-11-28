@@ -1,3 +1,4 @@
+set -x
 curl -X POST -H 'content-type: application/json;charset=UTF-8' -d '{"productName":"HD SetupBox", "serviceId":"100"}' 'https://productmicroservice.apps.dev.pcf-aws.com/product' > response
 grep '\"serviceId\":\"100\" 'response'
 if [ "$?" -eq "0" ] ; then
