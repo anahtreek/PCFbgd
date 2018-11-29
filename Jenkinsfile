@@ -21,9 +21,7 @@ node {
                 cf bind-service product  myservice;\
                 cf start;\
                 if [ $? -ne 0 ];then cf start; fi;\
-                curl -X POST -H 'content-type: application/json;charset=UTF-8' -d '{"productName":"HD SetupBox", "serviceId":"100"}' 'https://product_wipro_keerthi.apps.dev.pcf-aws.com/product' > response;\
-                grep '\"serviceId\":\"100\"' 'response';\
-                if [ $? -ne 0 ];then exit 1; fi;\
+                sh smokeTest.sh;\
                 else\
                 echo present;\
                 sudo cf bgd product --smoke-test ./smokeTest.sh;\
