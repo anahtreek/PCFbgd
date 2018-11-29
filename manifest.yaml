@@ -3,12 +3,9 @@ applications:
 - name: product
   memory: 1024M
   instances: 1
-  host: productmicroservice
   path: ./target/demo-0.0.1-SNAPSHOT.jar
-  random-route: false
   buildpack: https://github.com/cloudfoundry/java-buildpack.git
-  env:
-    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{ enabled: true }'
+  routes:
+  - route: product_wipro.apps.dev.pcf-aws.com
   services:
-    - myservice
-
+     - wordpress-site
