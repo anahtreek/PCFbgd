@@ -14,9 +14,16 @@ node {
                 cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
                 cf app product;\
                 if [ $? -ne 0 ];then \
-                echo present;\
-                else\
                 echo not present;\
+                cf push --no-start -n product_wipro_keerthi;\
+                cf create-service p.mysql db-small  myservice;\
+                cf bind-service product  myservice;\
+                cf start;\
+                if [ $? -ne 0 ];then cf start; fi;\
+                sh smokeTest.sh;\
+                else\
+                echo present;\
+                cf bgd product --smoke-test ./smokeTest.sh;\
                 fi"'          
         }
 }
