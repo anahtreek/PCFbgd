@@ -8,4 +8,4 @@ applications:
   routes:
   - route: product_wipro.apps.dev.pcf-aws.com
   services:
-     - wordpress-site
+     - myservice
