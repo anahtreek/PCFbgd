@@ -23,7 +23,7 @@ node {
                 sh smokeTest.sh;\
                 else\
                 echo present;\
-                cf bgd product --smoke-test ./smokeTest.sh;\
+                sudo cf bgd product --smoke-test ./smokeTest.sh;\
                 fi"'          
         }
 }
