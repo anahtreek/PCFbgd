@@ -16,7 +16,11 @@ node {
                 echo not present
                 else
                 echo present
-                fi'>check.sh;\
-                "'''         
+                fi'>check.sh"'''         
+        }
+        stage('Find and replace') {
+                sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
+                sed -i 's/@/$/g' check.sh;\
+                sed -i 's/#/?/g' check.sh"'''         
         }
 }
