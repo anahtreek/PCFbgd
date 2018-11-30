@@ -15,8 +15,7 @@ node {
                 sudo rm -rf check.sh;\
                 sudo touch check.sh;\
                 sudo chmod 777 check.sh
-                echo 'cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training
-                sudo cf app product
+                echo 'abc
                 if [ $? -ne 0 ];then 
                 echo not present
                 cf push --no-start -n product_wipro_keerthi
