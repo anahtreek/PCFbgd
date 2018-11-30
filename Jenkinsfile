@@ -16,13 +16,13 @@ node {
                 sudo touch check.sh;\
                 sudo chmod 777 check.sh
                 echo 'abc
-                if [ \'"$?"\' -ne "0" ];then 
+                if [ @# -ne 0 ];then 
                 echo not present
                 cf push --no-start -n product_wipro_keerthi
                 cf create-service p.mysql db-small  myservice
                 cf bind-service product  myservice
                 cf start
-                if [ $? -ne 0 ];then cf start; fi
+                if [ @# -ne 0 ];then cf start; fi
                 sh smokeTest.sh
                 else
                 echo present
