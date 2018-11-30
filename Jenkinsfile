@@ -9,7 +9,7 @@ node {
         stage('Check for app') {
                 try {
                      sh 'ssh rig@52.168.175.97 "cd PCFbgd;\
-                     cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
+                     sudo cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
                      sudo cf app product;\
                      echo present"'
                 }
