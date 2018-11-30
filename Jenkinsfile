@@ -14,7 +14,7 @@ node {
                 sh 'ssh rig@52.168.175.97 "cd PCFbgd;\
                 cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
                 sudo cf app product;\
-                status=$?;\
+                export status=$?;\
                 echo "status"$status;\
                 if [ $status -ne 0 ];then \
                 echo not present;\
