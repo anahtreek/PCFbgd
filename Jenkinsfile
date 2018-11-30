@@ -17,10 +17,4 @@ node {
                 sudo chmod 777 status;\
                 sudo cf app product>status"'''         
         }
-        stage('Deploy and Smoke test') {
-                sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
-                export x=`grep -oi 'FAILED' status | wc -l`;\
-                echo grep result;\
-                echo $x"'''         
-        }
 }
