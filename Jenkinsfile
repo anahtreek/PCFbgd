@@ -17,4 +17,12 @@ node {
                 sudo chmod 777 status;\
                 sudo cf app product>status"'''         
         }
+        stage('Deploy') {
+                sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
+                if [ grep -oi 'FAILED' status -eq 'FAILED' ];then \
+                echo true;\
+                else\
+                echo false;\
+                fi"'''         
+        }
 }
