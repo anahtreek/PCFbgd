@@ -13,9 +13,9 @@ node {
         stage('Deploy and Smoke test') {
                 sh 'ssh rig@52.168.175.97 "cd PCFbgd;\
                 cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
-                echo $?;\
-                sudo cf app product;\
-                if [ "$?" -ne "0" ];then \
+                x=sudo cf app product | grep 'FAILED';\
+                echo $x;\
+                if [ $? -ne 0 ];then \
                 echo not present;\
                 cf push --no-start -n product_wipro_keerthi;\
                 cf create-service p.mysql db-small  myservice;\
