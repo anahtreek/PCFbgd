@@ -5,16 +5,31 @@ node {
                 sudo git fetch --all;\
                 sudo git reset --hard origin/master;\
                 sudo chmod +x smokeTest.sh"'''
-           }
+        }
+        stage('Login') {
+                sh 'ssh rig@52.168.175.97 "cd PCFbgd;\
+                sudo cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training"'         
+        }
         stage('Check for app') {
-                try {
-                     sh 'ssh rig@52.168.175.97 "cd PCFbgd;\
-                     sudo cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
-                     echo `sudo cf app product`;\
-                     echo present"'
-                }
-                catch (exc) {
-                    echo 'Something failed, I should sound the klaxons!'
-                } 
+                sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
+                sudo rm -rf check.sh;\
+                sudo touch check.sh;\
+                sudo chmod 777 check.sh
+                echo 'sudo cf app product
+                if [ @# -ne 0 ];then 
+                echo not present
+                else
+                echo present
+                fi'>check.sh"'''         
+        }
+        stage('Find and replace') {
+                sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
+                sudo sed -i 's/@/$/g' check.sh;\
+                sudo sed -i 's/#/?/g' check.sh"'''         
+        }
+        stage('execute') {
+                sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
+                sudo sh check.sh"'''         
         }
 }
+
