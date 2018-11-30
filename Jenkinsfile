@@ -12,7 +12,23 @@ node {
         }
         stage('Check for app') {
                 sh '''ssh rig@52.168.175.97 "cd PCFbgd;\
-                cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training;\
-                echo ====$(echo `sudo cf app product` | grep -oi 'FAILED' | wc -l)"'''         
+                sudo rm -rf check.sh;\
+                touch check.sh;\
+                sudo chmod 777 check.sh
+                echo 'cf login -a https://api.system.dev.pcf-aws.com -u keerthana.n10@wipro.com -p Indian@123 -o Pcf-training -s training
+                sudo cf app product
+                if [ $? -ne 0 ];then 
+                echo not present
+                cf push --no-start -n product_wipro_keerthi
+                cf create-service p.mysql db-small  myservice
+                cf bind-service product  myservice
+                cf start
+                if [ $? -ne 0 ];then cf start; fi
+                sh smokeTest.sh
+                else
+                echo present
+                sudo cf bgd product --smoke-test ./smokeTest.sh
+                fi'>check.sh;\
+                "'''         
         }
 }
