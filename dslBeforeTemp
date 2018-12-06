@@ -20,25 +20,37 @@ job("Login") {
 }
 job("Deploy") {
         steps {
-     shell("ssh rig@52.168.175.97 \"cd PCFbgd;\
-                sudo rm -rf deploy.sh;\
-                sudo touch deploy.sh;\
-                sudo chmod 777 deploy.sh;\
-                echo 'sudo cf app product
-                if [ @# -ne 0 ];then 
-                echo app not present
-                cf push --no-start -n product_wipro_keerthi
-                cf create-service p.mysql db-small mysevice
-                cf bind-service product mysevice
-                cf start
-                if [ @# -ne 0 ];then cf start; fi
-                sh smokeTest.sh
-                else
-                echo app present
-                sudo cf bgd product --smoke-test ./smokeTest.sh
-                fi'>deploy.sh;\
-                sudo sed -i 's/@/$/g' deploy.sh;\
-                sudo sed -i 's/#/?/g' deploy.sh;\
-                sudo sh deploy.sh\"")
-    }
+               shell("""ssh rig@52.168.175.97 "cd PCFbgd
+sudo rm -rf deploy.sh
+sudo touch deploy.sh
+sudo chmod 777 deploy.sh
+echo 'sudo cf app product
+if [ @# -ne 0 ];then 
+        echo app not present  
+        sudo rm -rf servicecheck
+        sudo touch servicecheck
+        sudo chmod 777 servicecheck
+        sudo cf create-service p.mysql db-small myservice 
+        sudo cf service myservice > servicecheck
+        grep \\"create succeeded\\" servicecheck > /dev/null
+        while [ @# -ne 0 ]
+        do
+                echo 'sleeping'
+                sleep 10s
+                sudo cf service myservice > servicecheck
+                grep \\"create succeeded\\" servicecheck > /dev/null
+        done
+        sudo cf push --no-start
+        sudo cf bind-service product myservice
+        sudo cf start product
+        if [ @# -ne 0 ];then sudo cf start product; fi
+else
+        echo app present
+        sudo cf bgd product --smoke-test ./smokeTest.sh
+fi'>deploy.sh
+sudo sed -i 's/@/\$/g' deploy.sh
+sudo sed -i 's/#/?/g' deploy.sh
+sudo sh deploy.sh"""")
+        }
 }
+
