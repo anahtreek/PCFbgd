@@ -20,25 +20,38 @@ job("Login") {
 }
 job("Deploy") {
         steps {
-     shell("ssh azureUserName@azureIp \"cd scmRepoName;\
-                sudo rm -rf deploy.sh;\
-                sudo touch deploy.sh;\
-                sudo chmod 777 deploy.sh;\
-                echo 'sudo cf app appName
-                if [ @# -ne 0 ];then 
-                echo app not present
-                cf push --no-start -n hostName
-                cf create-service serviceType serviceProp serviceName
-                cf bind-service appName serviceName
-                cf start
-                if [ @# -ne 0 ];then cf start; fi
-                sh smokeTestFilePath
-                else
-                echo app present
-                sudo cf bgd appName --smoke-test ./smokeTestFilePath
-                fi'>deploy.sh;\
-                sudo sed -i 's/@/$/g' deploy.sh;\
-                sudo sed -i 's/#/?/g' deploy.sh;\
-                sudo sh deploy.sh\"")
-    }
+               shell("""ssh azureUserName@azureIp "cd scmRepoName
+sudo rm -rf deploy.sh
+sudo touch deploy.sh
+sudo chmod 777 deploy.sh
+echo 'sudo cf app appName
+if [ @# -ne 0 ];then 
+        echo app not present  
+        sudo rm -rf servicecheck
+        sudo touch servicecheck
+        sudo chmod 777 servicecheck
+        sudo cf create-service serviceType serviceProp serviceName
+        sudo cf service serviceName > servicecheck
+        grep \\"create succeeded\\" servicecheck > /dev/null
+        while [ @# -ne 0 ]
+        do
+                echo 'sleeping'
+                sleep 10s
+                sudo cf service serviceName > servicecheck
+                grep \\"create succeeded\\" servicecheck > /dev/null
+        done
+        sudo cf push --no-start
+        sudo cf bind-service appName serviceName
+        sudo cf start appName
+        if [ @# -ne 0 ];then sudo cf start appName; fi
+else
+        echo app present
+        sudo cf bgd appName --smoke-test ./smokeTest.sh
+fi'>deploy.sh
+sudo sed -i 's/@/\$/g' deploy.sh
+sudo sed -i 's/#/?/g' deploy.sh
+sudo sh deploy.sh"""")
+        }
 }
+
+
