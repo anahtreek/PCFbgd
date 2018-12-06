@@ -4,7 +4,7 @@ job("Check-in") {
                 cd scmRepoName;\
                 sudo git fetch --all;\
                 sudo git reset --hard origin/master;\
-                sudo chmod +x smokeTestFilePath\"")
+                sudo chmod +x smokeTest.sh\"")
     }
 }
 job("Build") {
